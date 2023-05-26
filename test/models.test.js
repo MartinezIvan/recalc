@@ -28,3 +28,24 @@ describe("History", () => {
         expect(histories[0].Operation.name).toEqual("SUB")
     })
 })
+
+describe("History", () => {
+    test("Deberia poder crear entrada en el history con el segundo parametro", async () => {
+        await createHistoryEntry({
+            firstArg: 2,
+            secondArg: 2,
+            result: 4,
+            operationName: "ADD"
+        })
+
+        const histories = await History.findAll({
+            include: [Operation]
+        })
+
+        expect(histories.length).toEqual(1)
+        expect(histories[0]).toBeInstanceOf(History)
+        expect(histories[0]).toHaveProperty('secondArg')
+        expect(histories[0].secondArg).toEqual(2)
+        expect(histories[0].Operation.name).toEqual("ADD")
+    })
+})
