@@ -15,6 +15,18 @@ router.get("/sub/:a/:b", async function (req, res) {
         res.status(400).send(e.message);
     }
 });
+
+router.get("/add/:a/:b", async function (req, res) {
+    try {
+        const params = getRequestParameters(req, res);
+        const result = core.add(params.a, params.b);
+        await createHistoryEntry({ firstArg: params.a, secondArg:params.b, operationName: "ADD" })
+        return res.send({result})
+    } catch (e) {
+        res.status(400).send(e.message);
+    }
+});
+
 router.get("/div/:a/:b", async function (req, res) {
     try {
         const params = getRequestParameters(req, res);
