@@ -5,12 +5,12 @@ import {createErrorHistoryEntry, createHistoryEntry} from './models.js'
 
 const router = express.Router();
 
-enum OperationType {
-    SUB,
-    ADD,
-    POW,
-    MUL,
-    DIV
+const OperationType  = {
+    SUB: 'SUB',
+    ADD: 'ADD',
+    POW: 'POW',
+    MUL: 'MUL',
+    DIV: 'DIV'
 }
 
 router.get("/sub/:a/:b", async function (req, res) {

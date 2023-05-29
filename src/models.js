@@ -11,7 +11,7 @@ const sequelize = new Sequelize({
 export const History = sequelize.define('History', {
     firstArg: {
         type: DataTypes.NUMBER,
-        allowNull: false
+        allowNull: true
     },
     secondArg: {
         type: DataTypes.NUMBER,
