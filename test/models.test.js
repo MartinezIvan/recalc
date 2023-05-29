@@ -2,7 +2,9 @@ const {seed} = require('../src/seed.js')
 const {
     createHistoryEntry,
     History,
-    Operation, createErrorHistoryEntry
+    Operation,
+    deleteHistory,
+    createErrorHistoryEntry
 } = require('../src/models.js')
 
 beforeEach(async () => {
@@ -45,7 +47,6 @@ describe("History", () => {
         expect(histories[0].secondArg).toEqual(2)
         expect(histories[0].Operation.name).toEqual("ADD")
     })
-
     test("Deberia guardar el texto de error en el historial", async () => {
         await createErrorHistoryEntry({
             error: "Esto es un error",
@@ -61,5 +62,33 @@ describe("History", () => {
         expect(histories[0]).toHaveProperty('error')
         expect(histories[0].error).toEqual("Esto es un error")
         expect(histories[0].Operation.name).toEqual("ADD")
+    })
+    test("Deberia poder eliminar todo del historial", async () => {
+        await createHistoryEntry({
+            firstArg: 2,
+            secondArg: 2,
+            result: 0,
+            operationName: "SUB"
+        })
+
+        await createHistoryEntry({
+            firstArg: 2,
+            secondArg: 2,
+            result: 4,
+            operationName: "ADD"
+        })
+
+        const historiesBeforeDelete = await History.findAll({
+            include: [Operation]
+        })
+
+        await deleteHistory()
+
+        const historiesAfterDelete = await History.findAll({
+            include: [Operation]
+        })
+
+        expect(historiesBeforeDelete.length).toEqual(2)
+        expect(historiesAfterDelete.length).toEqual(0)
     })
 })

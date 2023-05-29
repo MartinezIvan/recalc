@@ -43,7 +43,6 @@ export async function createHistoryEntry({ firstArg, secondArg, operationName, r
             name: operationName
         }
     });
-
     return History.create({
         firstArg: firstArg,
         secondArg: secondArg,
@@ -64,6 +63,13 @@ export async function createErrorHistoryEntry({ firstArg, secondArg, operationNa
         secondArg: secondArg,
         error: error,
         OperationId: operation.id
+    })
+}
+
+export async function deleteHistory(){
+    await History.destroy({
+        where: {},
+        truncate: true
     })
 }
 
