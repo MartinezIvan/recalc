@@ -3,6 +3,7 @@ const {
     createHistoryEntry,
     History,
     Operation,
+    findAll,
     deleteHistory,
     createErrorHistoryEntry
 } = require('../src/models.js')
@@ -47,6 +48,26 @@ describe("History", () => {
         expect(histories[0].secondArg).toEqual(2)
         expect(histories[0].Operation.name).toEqual("ADD")
     })
+
+    test("Deberia traer todo el historial", async ()=>{
+
+        await createHistoryEntry({
+            firstArg: 4,
+            secondArg: 3,
+            result:7,
+            operationName:"ADD"
+        })
+
+        var allHistory
+        await findAll().then(h =>{
+            allHistory=h
+        })
+        
+        expect(allHistory).not.toBeNull()
+        expect(allHistory.length).toBeGreaterThan(0)
+        expect(allHistory[0]).toBeInstanceOf(History)
+        
+    })
     test("Deberia guardar el texto de error en el historial", async () => {
         await createErrorHistoryEntry({
             error: "Esto es un error",
@@ -63,6 +84,7 @@ describe("History", () => {
         expect(histories[0].error).toEqual("Esto es un error")
         expect(histories[0].Operation.name).toEqual("ADD")
     })
+
     test("Deberia poder eliminar todo del historial", async () => {
         await createHistoryEntry({
             firstArg: 2,
@@ -90,5 +112,5 @@ describe("History", () => {
 
         expect(historiesBeforeDelete.length).toEqual(2)
         expect(historiesAfterDelete.length).toEqual(0)
+        })
     })
-})

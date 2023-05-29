@@ -79,3 +79,9 @@ export function createTables() {
         Operation.sync({ force: true })
     ]);
 }
+
+export function findAll(){
+    return History.findAll({
+        include: [Operation]
+    })
+}
