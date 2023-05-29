@@ -47,5 +47,33 @@ describe("API addition", () => {
             
         expect(res.body.result).toBeCloseTo(0.3,5)
     })
+})
 
+describe("API multiplication", () => {
+    test("Si los parametros son decimales, el resultado debe ser decimal.", async () => {
+        const app = await api.build()
+
+        let a = Math.floor(Math.random());
+        let b = Math.floor(Math.random());
+
+        const res = await request(app)
+            .get(`/api/v1/mul/${a}/${b}`)
+            .expect(200)
+            .expect('Content-Type', "application/json; charset=utf-8")
+
+        expect(res.body.result).toBeLessThan(1);
+    })
+    test("Si los parametros son decimales, el resultado debe ser decimal.", async () => {
+        const app = await api.build()
+
+        let a = "invalidParam"
+        let b = Math.floor(Math.random());
+
+        const res = await request(app)
+            .get(`/api/v1/mul/${a}/${b}`)
+            .expect(400)
+            .expect('Content-Type', "text/html; charset=utf-8")
+
+        expect(res.text).toBe('Uno o ambos parametros no son un numero.');
+    })
 })
