@@ -43,7 +43,6 @@ export async function createHistoryEntry({ firstArg, secondArg, operationName, r
             name: operationName
         }
     });
-
     return History.create({
         firstArg: firstArg,
         secondArg: secondArg,
@@ -67,9 +66,22 @@ export async function createErrorHistoryEntry({ firstArg, secondArg, operationNa
     })
 }
 
+export async function deleteHistory(){
+    await History.destroy({
+        where: {},
+        truncate: true
+    })
+}
+
 export function createTables() {
     return Promise.all([
         History.sync({ force: true }),
         Operation.sync({ force: true })
     ]);
+}
+
+export function findAll(){
+    return History.findAll({
+        include: [Operation]
+    })
 }
