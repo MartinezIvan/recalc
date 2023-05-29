@@ -11,7 +11,7 @@ const sequelize = new Sequelize({
 export const History = sequelize.define('History', {
     firstArg: {
         type: DataTypes.NUMBER,
-        allowNull: false
+        allowNull: true
     },
     secondArg: {
         type: DataTypes.NUMBER,
@@ -19,6 +19,10 @@ export const History = sequelize.define('History', {
     },
     result: {
         type: DataTypes.NUMBER,
+        allowNull: true
+    },
+    error: {
+        type: DataTypes.TEXT,
         allowNull: true
     }
 });
@@ -40,9 +44,24 @@ export async function createHistoryEntry({ firstArg, secondArg, operationName, r
         }
     });
     return History.create({
-        firstArg,
-        secondArg,
-        result,
+        firstArg: firstArg,
+        secondArg: secondArg,
+        result: result,
+        OperationId: operation.id
+    })
+}
+
+export async function createErrorHistoryEntry({ firstArg, secondArg, operationName, error }) {
+    const operation = await Operation.findOne({
+        where: {
+            name: operationName
+        }
+    });
+
+    return History.create({
+        firstArg: firstArg,
+        secondArg: secondArg,
+        error: error,
         OperationId: operation.id
     })
 }
