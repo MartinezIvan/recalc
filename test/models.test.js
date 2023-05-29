@@ -2,7 +2,8 @@ const { seed } = require('../src/seed.js')
 const {
     createHistoryEntry,
     History,
-    Operation
+    Operation,
+    findAll
 } = require('../src/models.js')
 
 beforeEach(async () => {
@@ -47,5 +48,28 @@ describe("History", () => {
         expect(histories[0]).toHaveProperty('secondArg')
         expect(histories[0].secondArg).toEqual(2)
         expect(histories[0].Operation.name).toEqual("ADD")
+    })
+})
+
+describe("History",() =>{
+    test("Deberia traer todo el historial", async ()=>{
+
+        await createHistoryEntry({
+            firstArg: 4,
+            secondArg: 3,
+            result:7,
+            operationName:"ADD"
+        })
+
+        var allHistory
+        await findAll().then(h =>{
+            allHistory=h
+        })
+        
+        expect(allHistory).not.toBeNull()
+        expect(allHistory.length).toBeGreaterThan(0)
+        expect(allHistory[0]).toBeInstanceOf(History)
+        
+
     })
 })
