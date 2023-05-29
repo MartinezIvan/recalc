@@ -50,14 +50,14 @@ describe('Div', () => {
 
 describe('Add', () => {
     test('Should be true that a+b > a', () => {
-        let a = Math.floor(Math.random() * 50);
-        let b = Math.floor(Math.random() * 50);
+        let a = Math.floor((Math.random() * 50)+1);
+        let b = Math.floor((Math.random() * 50)+1);
         expect(core.add(a,b)).toBeGreaterThan(a);
     })
 
     test('Should be true that a+b > b', () => {
-        let a = Math.floor(Math.random() * 50);
-        let b = Math.floor(Math.random() * 50);
+        let a = Math.floor((Math.random() * 50)+1);
+        let b = Math.floor((Math.random() * 50)+1);
         expect(core.add(a,b)).toBeGreaterThan(b);
     })
 
