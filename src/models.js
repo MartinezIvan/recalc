@@ -48,13 +48,6 @@ export async function createHistoryEntry({ firstArg, secondArg, operationName, r
     })
 }
 
-export async function deleteHistory(){
-    return History.destroy({
-        where: {},
-        truncate: false
-    })
-}
-
 export function createTables() {
     return Promise.all([
         History.sync({ force: true }),
