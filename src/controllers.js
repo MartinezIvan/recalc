@@ -52,6 +52,7 @@ router.get("/pow/:a", async function (req, res) {
     if (isNaN(a))
         return res.status(400).send('El parametro debe ser un numero.');
     const result = core.pow(a);
+    await createHistoryEntry({firstArg: a, operationName:"POW"})
     return res.send({result})
 });
 
