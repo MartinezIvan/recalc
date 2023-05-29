@@ -1,17 +1,24 @@
 import express from 'express';
 import core from './core.js';
 
-import { createHistoryEntry } from './models.js'
+import {createErrorHistoryEntry, createHistoryEntry} from './models.js'
 
 const router = express.Router();
-
 router.get("/sub/:a/:b", async function (req, res) {
     try {
         const params = getRequestParameters(req, res);
         const result = core.sub(params.a, params.b);
-        await createHistoryEntry({ firstArg: params.a, secondArg: params.b, operationName: "SUB" })
+        await createHistoryEntry({
+            firstArg: params.a,
+            secondArg: params.b,
+            operationName: "SUB"
+        })
         return res.send({result});
     } catch (e) {
+        await createErrorHistoryEntry({
+            operationName: "SUB",
+            error: e.message
+        })
         res.status(400).send(e.message);
     }
 });
@@ -20,9 +27,13 @@ router.get("/add/:a/:b", async function (req, res) {
     try {
         const params = getRequestParameters(req, res);
         const result = core.add(params.a, params.b);
-        await createHistoryEntry({ firstArg: params.a, secondArg:params.b, operationName: "ADD" })
+        await createHistoryEntry({firstArg: params.a, secondArg: params.b, operationName: "ADD"})
         return res.send({result})
     } catch (e) {
+        await createErrorHistoryEntry({
+            operationName: "ADD",
+            error: e.message
+        })
         res.status(400).send(e.message);
     }
 });
@@ -33,6 +44,10 @@ router.get("/div/:a/:b", async function (req, res) {
         const result = core.div(params.a, params.b);
         return res.send({result})
     } catch (e) {
+        await createErrorHistoryEntry({
+            operationName: "DIV",
+            error: e.message
+        })
         res.status(400).send(e.message);
     }
 });
@@ -43,14 +58,23 @@ router.get("/mul/:a/:b", async function (req, res) {
         const result = core.mul(params.a, params.b);
         return res.send({result})
     } catch (e) {
+        await createErrorHistoryEntry({
+            operationName: "MUL",
+            error: e.message
+        })
         res.status(400).send(e.message);
     }
 });
 
 router.get("/pow/:a", async function (req, res) {
     const a = Number(req.params.a);
-    if (isNaN(a))
+    if (isNaN(a)){
+        await createErrorHistoryEntry({
+            operationName: "POW",
+            error: 'El parametro debe ser un numero.'
+        });
         return res.status(400).send('El parametro debe ser un numero.');
+    }
     const result = core.pow(a);
     return res.send({result})
 });
