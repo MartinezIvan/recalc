@@ -66,7 +66,7 @@ describe("API division", () => {
         const app = await api.build()
 
         let a = Math.floor(Math.random() * 50);
-        let b = Math.floor(Math.random() * 10) + 1;
+        let b = Math.floor(Math.random() * 10) + 2;
 
         const res = await request(app)
             .get(`/api/v1/div/${a}/${b}`)
@@ -74,6 +74,20 @@ describe("API division", () => {
             .expect('Content-Type', "application/json; charset=utf-8")
 
         expect(res.body.result).toBeLessThan(a)
+        expect(typeof (res.body.result)).toBe(typeof(1))
+    })
+    test("Si el divisor es 1, deberia devolver el primer parametro", async () => {
+        const app = await api.build()
+
+        let a = Math.floor(Math.random() * 50);
+        let b = 1;
+
+        const res = await request(app)
+            .get(`/api/v1/div/${a}/${b}`)
+            .expect(200)
+            .expect('Content-Type', "application/json; charset=utf-8")
+
+        expect(res.body.result).toBe(a)
         expect(typeof (res.body.result)).toBe(typeof(1))
     })
 })
