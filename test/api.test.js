@@ -49,3 +49,18 @@ describe("API addition", () => {
     })
 
 })
+
+describe("API pow", ()=>{
+    test("Si el parametro no es un numero responder con un 400", async () => {
+        const app = await api.build()
+
+        let a = "NoSoyUnNumero"
+
+        const res = await request(app)
+        .get(`/api/v1/pow/${a}`)
+        .expect(400)
+        .expect('Content-Type', "text/html; charset=utf-8")
+
+        expect(res.text).toBe("El parametro debe ser un numero.")
+    })
+})
