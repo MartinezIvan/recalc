@@ -1,19 +1,26 @@
+import path from 'path'
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import controllers from './controllers.js';
 
-const PORT = process.env.PORT || 8080;
+const publicPath = path.join('src', 'public')
 
-const app = express();
+let unused;
 
-app.use(bodyParser.json())
+export async function build() {
+    const app = express();
 
-app.get('/', (req, res) => {
-    res.send({ ok: true })
-})
+    app.use(bodyParser.json())
+    app.use(express.static(publicPath))
 
-app.use("/api/v1", controllers);
+    app.get('/', (req, res) => {
+        res.sendFile(path.resolve(publicPath, 'index.html'))
+    })
 
-app.listen(PORT, () => {
-    console.log(`API running on http://localhost:${PORT}`)
-})
+    let nousada = 20;
+
+    app.use("/api/v1", controllers);
+
+    return app
+}
