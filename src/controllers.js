@@ -20,8 +20,7 @@ router.get("/sub/:a/:b", async function (req, res) {
         await createHistoryEntry({
             firstArg: params.a,
             secondArg: params.b,
-            operationName: OperationType.SUB,
-            result:result
+            operationName: OperationType.SUB
         })
         return res.send({result});
     } catch (e) {
