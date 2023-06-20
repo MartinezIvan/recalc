@@ -6,8 +6,6 @@ import controllers from './controllers.js';
 
 const publicPath = path.join('src', 'public')
 
-let unused;
-
 export async function build() {
     const app = express();
 
@@ -17,8 +15,6 @@ export async function build() {
     app.get('/', (req, res) => {
         res.sendFile(path.resolve(publicPath, 'index.html'))
     })
-
-    let nousada = 20;
 
     app.use("/api/v1", controllers);
 
