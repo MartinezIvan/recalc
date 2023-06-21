@@ -114,4 +114,20 @@ test.describe('test', () => {
     expect(historyEntry.result).toEqual(2)
   });
 
+  test('Debe mostrar un mensaje de error en la calculadora', async ({ page }) => {
+    await page.goto('./');
+
+    await page.getByRole('button', { name: '7' }).click()
+    await page.getByRole('button', { name: '/' }).click()
+    await page.getByRole('button', { name: '0' }).click()
+    await page.getByRole('button', {name: '='}).click()
+
+    await page.waitForTimeout(500);
+    const displayValue = await page.$eval('.display', (element) => element.value);
+    expect(displayValue).toBe('Error');
+
+   
+
+  });
+  
 })
