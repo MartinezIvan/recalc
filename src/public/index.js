@@ -49,4 +49,4 @@ function renderDisplay(chars) {
     $display.value = chars;
 }
 
-function rerender() { }
+
