@@ -64,13 +64,9 @@ async function calculateDiv(firstArg, secondArg){
     const rta = await fetch(`/api/v1/div/${firstArg}/${secondArg}`)
     if(rta.status === 400){
         return "Error"
-    }else{
-        const { result } = await rta.json();
-        return result 
     }
-    
-    
-   
+    const { result } = await rta.json();
+    return result    
 }
 
 function renderDisplay(chars) {
