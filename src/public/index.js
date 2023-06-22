@@ -62,10 +62,10 @@ async function calculateMul(firstArg, secondArg) {
 }
 
 async function calculateDiv(firstArg, secondArg){
-    if(parseInt(secondArg) === 0){
+    const rta = await fetch(`/api/v1/div/${firstArg}/${secondArg}`)
+    if(rta.status === 400){
         return "Error"
     }else{
-        const rta = await fetch(`/api/v1/div/${firstArg}/${secondArg}`)
         const { result } = await rta.json();
         return result 
     }
