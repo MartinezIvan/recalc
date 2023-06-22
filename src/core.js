@@ -12,9 +12,12 @@ function multiply(a, b) {
 
 
 function divide (a, b) {
-    if(b === 0)
+    if(b === 0){
         throw new Error("No se puede dividir entre 0!");
+    }
     return a/b;
+       
+   
 }
 
 function pow(a) {

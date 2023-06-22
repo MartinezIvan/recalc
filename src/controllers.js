@@ -112,9 +112,10 @@ router.get("/pow/:a", async function (req, res) {
 function getRequestParameters(req) {
     const a = Number(req.params.a);
     const b = Number(req.params.b);
-    if (isNaN(a) || isNaN(b))
+    if (isNaN(a) || isNaN(b)){
         throw new Error('Uno o ambos parametros no son un numero.');
-    return {a, b}
+    }
+    return {a, b}      
 }
 
 export default router;
