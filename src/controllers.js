@@ -100,10 +100,8 @@ function getRequestParameters(req) {
     const b = Number(req.params.b);
     if (isNaN(a) || isNaN(b)){
         throw new Error('Uno o ambos parametros no son un numero.');
-    }else{
-      return {a, b}  
     }
-    
+    return {a, b}      
 }
 
 export default router;

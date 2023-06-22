@@ -49,4 +49,3 @@ function renderDisplay(chars) {
     $display.value = chars;
 }
 
-
