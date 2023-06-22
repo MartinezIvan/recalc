@@ -126,7 +126,17 @@ test.describe('test', () => {
     const displayValue = await page.$eval('.display', (element) => element.value);
     expect(displayValue).toBe('Error');
 
-   
+    const operation = await Operation.findOne({
+      where: {
+        name: "DIV"
+      }
+    });
+
+    const errorHistoryEntry = await History.findOne({
+      where: { OperationId: operation.id }
+    })
+
+    expect(errorHistoryEntry.error).toEqual("No se puede dividir entre 0!")
 
   });
   
