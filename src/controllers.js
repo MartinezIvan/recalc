@@ -58,6 +58,12 @@ router.get("/div/:a/:b", async function (req, res) {
     try {
         const params = getRequestParameters(req, res);
         const result = core.div(params.a, params.b);
+        await createHistoryEntry({
+            firstArg: params.a,
+            secondArg: params.b,
+            operationName: OperationType.DIV,
+            result: result
+        })
         return res.send({result})
     } catch (e) {
         await createErrorHistoryEntry({

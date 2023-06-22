@@ -82,4 +82,62 @@ test.describe('test', () => {
     expect(historyEntry.result).toEqual(38)
   });
 
+  test('Deberia poder realizar una division', async ({ page }) => {
+    await page.goto('./');
+
+    await page.getByRole('button', { name: '4' }).click()
+    await page.getByRole('button', { name: '/' }).click()
+    await page.getByRole('button', { name: '2' }).click()
+
+    const [response] = await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/api/v1/div/')),
+      page.getByRole('button', { name: '=' }).click()
+    ]);
+
+    const { result } = await response.json();
+    expect(result).toBe(2);
+
+    await expect(page.getByTestId('display')).toHaveValue(/2/)
+
+    const operation = await Operation.findOne({
+      where: {
+        name: "DIV"
+      }
+    });
+
+    const historyEntry = await History.findOne({
+      where: { OperationId: operation.id }
+    })
+
+    expect(historyEntry.firstArg).toEqual(4)
+    expect(historyEntry.secondArg).toEqual(2)
+    expect(historyEntry.result).toEqual(2)
+  });
+
+  test('Debe mostrar un mensaje de error en la calculadora', async ({ page }) => {
+    await page.goto('./');
+
+    await page.getByRole('button', { name: '7' }).click()
+    await page.getByRole('button', { name: '/' }).click()
+    await page.getByRole('button', { name: '0' }).click()
+    await page.getByRole('button', {name: '='}).click()
+
+    await page.waitForTimeout(500);
+    const displayValue = await page.$eval('.display', (element) => element.value);
+    expect(displayValue).toBe('Error');
+
+    const operation = await Operation.findOne({
+      where: {
+        name: "DIV"
+      }
+    });
+
+    const errorHistoryEntry = await History.findOne({
+      where: { OperationId: operation.id }
+    })
+
+    expect(errorHistoryEntry.error).toEqual("No se puede dividir entre 0!")
+
+  });
+  
 })
