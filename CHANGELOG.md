@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.3]
+
+- Aplicamos correcciones con esLint
+- Arreglamos los botones div y mul en la interfaz gráfica
+
 ## [1.3.2] 08-06-2023
 
 ### Fixed
