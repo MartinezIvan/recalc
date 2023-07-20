@@ -82,6 +82,45 @@ test.describe('test', () => {
     expect(historyEntry.result).toEqual(38)
   });
 
+  test('Deberia poder realizar una multiplicacion, si el primer valor es negativo y ambos distintos de 0 deberia devolver un resultado negativo', async ({ page }) => {
+    await page.goto('./');
+
+    let primerNumero = (Math.floor(Math.random() * 9) + 1).toString()
+    let segundoNumero = (Math.floor(Math.random() * 9) + 1).toString()
+
+    await page.getByRole('button', { name: '-' }).click()
+    await page.getByRole('button', { name: primerNumero }).click()
+    await page.getByRole('button', { name: '*' }).click()
+    await page.getByRole('button', { name: segundoNumero }).click()
+
+    const [response] = await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/api/v1/mul/')),
+      page.getByRole('button', { name: '=' }).click()
+    ]);
+
+    const { result } = await response.json();
+    expect(result).toBeLessThan(0);
+
+    await expect(page.getByTestId('display')).toHaveValue(/-[0-9]/)
+
+    const operation = await Operation.findOne({
+      where: {
+        name: "MUL"
+      }
+    });
+
+    const historyEntry = await History.findOne({
+      where: { OperationId: operation.id }
+    })
+
+    var valorDePrimerNumero = -parseInt(primerNumero) 
+    var valorDeSegundoNumero = parseInt(segundoNumero)
+
+    expect(historyEntry.firstArg).toEqual(valorDePrimerNumero)
+    expect(historyEntry.secondArg).toEqual(valorDeSegundoNumero)
+    expect(historyEntry.result).toBeLessThan(0);
+  });
+
   test('Deberia poder realizar una division', async ({ page }) => {
     await page.goto('./');
 
@@ -120,7 +159,7 @@ test.describe('test', () => {
     await page.getByRole('button', { name: '7' }).click()
     await page.getByRole('button', { name: '/' }).click()
     await page.getByRole('button', { name: '0' }).click()
-    await page.getByRole('button', {name: '='}).click()
+    await page.getByRole('button', { name: '=' }).click()
 
     await page.waitForTimeout(500);
     const displayValue = await page.$eval('.display', (element) => element.value);
@@ -139,5 +178,5 @@ test.describe('test', () => {
     expect(errorHistoryEntry.error).toEqual("No se puede dividir entre 0!")
 
   });
-  
+
 })
