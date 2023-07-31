@@ -161,6 +161,13 @@ test.describe('test', () => {
     await page.getByRole('button', { name: '0' }).click()
     await page.getByRole('button', { name: '=' }).click()
 
+    const [response] = await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/api/v1/div/')),
+      page.getByRole('button', { name: '=' }).click()
+    ]);
+    const { result } = response;
+    expect(result).toBe(undefined);
+
     await page.waitForTimeout(500);
     const displayValue = await page.$eval('.display', (element) => element.value);
     expect(displayValue).toBe('Error');
