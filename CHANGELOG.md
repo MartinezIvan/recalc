@@ -5,8 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.5] 31-07-2023
+
+## Added
+
+- Agregamos etiquetas en el changelog
+
 ## [1.3.4] 31-07-2023
+
+## Fixed
+
 - Aplicamos correccion al test:e2e de div por 0
+
+## Added
+
 - Agregamos test:e2e para multiplicacion con primer valor negativo
 - Agregamos funcionalidad a la suma
 - Agregamos test:e2e para la suma
@@ -15,8 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.3]
 
+## Fixed
+
 - Aplicamos correcciones con esLint
 - Arreglamos los botones div y mul en la interfaz gráfica
+
 
 ## [1.3.2] 08-06-2023
 
