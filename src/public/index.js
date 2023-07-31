@@ -1,7 +1,7 @@
 const $display = document.querySelector('.display')
 const $buttons = document.querySelector('.buttons')
 
-const operations = ['-','*', '/'];
+const operations = ['-','*', '/', '+'];
 
 let currentDisplay = "";
 let operation = null;
@@ -15,18 +15,18 @@ $buttons.addEventListener('click', async (e) => {
         const [firstArg, secondArg] = currentDisplay.split(operation)
 
         let result;
-
-        if (operation === "-") {
-            result = await calculateSub(firstArg, secondArg)
-        }
-
-        if (operation === "*") {
-            result = await calculateMul(firstArg, secondArg)
-        }
-
-        if (operation === "/"){
-            result = await calculateDiv(firstArg, secondArg)
-           
+        switch(operation){
+            case "-":
+                result = await calculateSub(firstArg, secondArg)
+                break
+            case "*":
+                result = await calculateMul(firstArg, secondArg)
+                break
+            case "/":
+                result = await calculateDiv(firstArg, secondArg)
+                break
+            case "+":
+                result = await calculateSum(firstArg, secondArg)
         }
 
         reset = true;
@@ -37,6 +37,12 @@ $buttons.addEventListener('click', async (e) => {
         operation = nextAction;
     }
 
+    if(nextAction === "c"){
+        operation = false
+        renderDisplay("")
+        return
+    }
+
     if (reset) {
         reset = false;
         operation = null;
@@ -45,6 +51,13 @@ $buttons.addEventListener('click', async (e) => {
         renderDisplay(currentDisplay + nextAction);
     }
 })
+
+async function calculateSum(firstArg, secondArg) {
+    const resp = await fetch(`/api/v1/add/${firstArg}/${secondArg}`)
+    const { result } = await resp.json();
+
+    return result;
+}
 
 async function calculateSub(firstArg, secondArg) {
     const resp = await fetch(`/api/v1/sub/${firstArg}/${secondArg}`)

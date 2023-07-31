@@ -121,6 +121,41 @@ test.describe('test', () => {
     expect(historyEntry.result).toBeLessThan(0);
   });
 
+  test('Deberia poder realizar una sumatoria, siendo los dos valores positivos, deberia devolver un positivo. ' +
+      'Deberia guardar una entrada en el historial con los parametros correctos', async ({ page }) => {
+    await page.goto('./')
+
+    let primerNumero = (Math.floor(Math.random() * 9) + 1)
+    let segundoNumero = (Math.floor(Math.random() * 9) + 1)
+
+    await page.getByRole('button', { name: primerNumero.toString() }).click()
+    await page.getByRole('button', { name: '+' }).click()
+    await page.getByRole('button', { name: segundoNumero.toString() }).click()
+
+    const [response] = await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/api/v1/add/')),
+      page.getByRole('button', { name: '=' }).click()
+    ]);
+
+    const { result } = await response.json()
+    expect(result).toBe(primerNumero+segundoNumero)
+    await expect(page.getByTestId('display')).toHaveValue(/[0-9]/)
+
+    const operation = await Operation.findOne({
+      where: {
+        name: "ADD"
+      }
+    });
+
+    const historyEntry = await History.findOne({
+      where: { OperationId: operation.id }
+    })
+
+    expect(historyEntry.firstArg).toEqual(primerNumero)
+    expect(historyEntry.secondArg).toEqual(segundoNumero)
+    expect(historyEntry.result).toBe(primerNumero+segundoNumero);
+  });
+
   test('Deberia poder realizar una division', async ({ page }) => {
     await page.goto('./');
 
